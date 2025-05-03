@@ -1,0 +1,17 @@
+# Compiled python modules
+__pycache__/
+*.pyc
+
+# Odoo artifacts
+*.log
+*.db
+*.zip
+*.xml~
+
+# OS/Editor files
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+.env
