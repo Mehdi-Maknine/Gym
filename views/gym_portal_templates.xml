@@ -1,6 +1,6 @@
 <odoo>
     <template id="portal_my_home_gym" name="Gym Info" inherit_id="portal.portal_my_home">
-        <xpath expr="//div[@id='portal_content']" position="inside">
+        <xpath expr="//div[contains(@class, 'o_portal_my_home')]" position="inside">
             <div class="mt16">
                 <h4>Your Gym Info</h4>
                 <ul class="list-unstyled">

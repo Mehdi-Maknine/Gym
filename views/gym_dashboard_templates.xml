@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <template id="gym_dashboard_template">
         <t t-call="web.layout">
@@ -5,16 +6,24 @@
                 <h2>Gym Dashboard</h2>
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <div class="alert alert-success">Active Members: <strong><t t-esc="active_members"/></strong></div>
+                        <div class="alert alert-success">
+                            Active Members: <strong><t t-esc="active_members"/></strong>
+                        </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div class="alert alert-info">Upcoming Sessions: <strong><t t-esc="upcoming_sessions"/></strong></div>
+                        <div class="alert alert-info">
+                            Upcoming Sessions: <strong><t t-esc="upcoming_sessions"/></strong>
+                        </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div class="alert alert-warning">Expiring Soon: <strong><t t-esc="expiring_members"/></strong></div>
+                        <div class="alert alert-warning">
+                            Expiring Soon: <strong><t t-esc="expiring_members"/></strong>
+                        </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div class="alert alert-primary">Total Revenue: €<strong><t t-esc="total_payments"/></strong></div>
+                        <div class="alert alert-primary">
+                            Total Revenue: €<strong><t t-esc="total_payments"/></strong>
+                        </div>
                     </div>
                 </div>
             </div>

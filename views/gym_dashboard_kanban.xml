@@ -1,4 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+
+    <!-- Kanban View -->
     <record id="view_gym_dashboard_kanban" model="ir.ui.view">
         <field name="name">gym.dashboard.kanban</field>
         <field name="model">gym.dashboard</field>
@@ -8,11 +11,11 @@
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click o_kanban_card">
                             <div class="o_kanban_primary_left">
-                                <h3><t t-esc="record.name.value"/></h3>
-                                <div>Active Members: <strong><t t-esc="record.active_members.value"/></strong></div>
-                                <div>Upcoming Sessions: <strong><t t-esc="record.upcoming_sessions.value"/></strong></div>
-                                <div>Expiring Memberships: <strong><t t-esc="record.expiring_members.value"/></strong></div>
-                                <div>Total Payments: €<strong><t t-esc="record.total_payments.value"/></strong></div>
+                                <h3><t t-esc="record.name"/></h3>
+                                <div>Active Members: <strong><t t-esc="record.active_members"/></strong></div>
+                                <div>Upcoming Sessions: <strong><t t-esc="record.upcoming_sessions"/></strong></div>
+                                <div>Expiring Memberships: <strong><t t-esc="record.expiring_members"/></strong></div>
+                                <div>Total Payments: €<strong><t t-esc="record.total_payments"/></strong></div>
                             </div>
                         </div>
                     </t>
@@ -21,10 +24,15 @@
         </field>
     </record>
 
-    <act_window id="action_gym_dashboard" name="Gym Dashboard"
-        res_model="gym.dashboard" view_mode="kanban"
-        target="main"/>
+    <!-- Action -->
+    <record id="action_gym_dashboard_kanban" model="ir.actions.act_window">
+        <field name="name">Gym Dashboard</field>
+        <field name="res_model">gym.dashboard</field>
+        <field name="view_mode">kanban</field>
+        <field name="target">main</field>
+    </record>
 
-    <menuitem id="menu_gym_dashboard" name="Dashboard" parent="menu_gym_root" sequence="1"
-        action="action_gym_dashboard"/>
+    <!-- Menu Item -->
+    <menuitem id="menu_gym_dashboard" name="Dashboard" parent="menu_gym_root" sequence="1" action="action_gym_dashboard_kanban"/>
+
 </odoo>

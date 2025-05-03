@@ -52,6 +52,6 @@ class GymMember(models.Model):
             ('is_membership_expired', '=', False)
         ])
 
-        template = self.env.ref('gym_management.email_template_membership_expiry')
+        template = self.env.ref('gym_meliora.email_template_membership_expiry')
         for member in members:
             template.send_mail(member.id, force_send=True)

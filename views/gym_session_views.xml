@@ -1,4 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+
+    <!-- Tree (List) View -->
+    <record id="view_gym_session_list" model="ir.ui.view">
+        <field name="name">gym.session.list</field>
+        <field name="model">gym.session</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="trainer_id"/>
+                <field name="start_datetime"/>
+                <field name="max_members"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
     <record id="view_gym_session_form" model="ir.ui.view">
         <field name="name">gym.session.form</field>
         <field name="model">gym.session</field>
@@ -20,11 +37,11 @@
                     <notebook>
                         <page string="Attendance">
                             <field name="attendance_ids">
-                                <tree editable="bottom">
+                                <list editable="bottom">
                                     <field name="member_id"/>
                                     <field name="check_in_time"/>
                                     <field name="status"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -33,19 +50,7 @@
         </field>
     </record>
 
-    <record id="view_gym_session_tree" model="ir.ui.view">
-        <field name="name">gym.session.tree</field>
-        <field name="model">gym.session</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="name"/>
-                <field name="trainer_id"/>
-                <field name="start_datetime"/>
-                <field name="max_members"/>
-            </tree>
-        </field>
-    </record>
-
+    <!-- Calendar View -->
     <record id="view_gym_session_calendar" model="ir.ui.view">
         <field name="name">gym.session.calendar</field>
         <field name="model">gym.session</field>
@@ -57,12 +62,14 @@
         </field>
     </record>
 
+    <!-- Action -->
+    <record id="action_gym_session" model="ir.actions.act_window">
+        <field name="name">Class Sessions</field>
+        <field name="res_model">gym.session</field>
+        <field name="view_mode">list,form,calendar</field>
+    </record>
 
-    <menuitem id="menu_session" name="Class Sessions" parent="menu_gym_root"/>
-    
-    <act_window id="action_gym_session" name="Class Sessions"
-            res_model="gym.session"
-            view_mode="tree,form,calendar"
-            menu_id="menu_session"/>
+    <!-- Menu Item -->
+    <menuitem id="menu_session" name="Class Sessions" parent="menu_gym_root" action="action_gym_session"/>
 
 </odoo>

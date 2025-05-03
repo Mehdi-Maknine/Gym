@@ -1,4 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- Submenu -->
+    <menuitem id="menu_gym_members" name="Members" parent="menu_gym_root" sequence="20"/>
+
+    <!-- Action -->
+    <record id="action_gym_member" model="ir.actions.act_window">
+        <field name="name">Gym Members</field>
+        <field name="res_model">gym.member</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Bind Action to Menu -->
+    <menuitem id="menu_action_gym_member"
+              name="Manage Members"
+              parent="menu_gym_members"
+              action="action_gym_member"
+              sequence="30"/>
+
+    <!-- List View -->
+    <record id="view_gym_member_list" model="ir.ui.view">
+        <field name="name">gym.member.list</field>
+        <field name="model">gym.member</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
     <record id="view_gym_member_form" model="ir.ui.view">
         <field name="name">gym.member.form</field>
         <field name="model">gym.member</field>
@@ -11,53 +43,9 @@
                         <field name="phone"/>
                         <field name="active"/>
                     </group>
-
-                    <group string="Membership Info">
-                        <field name="join_date"/>
-                        <field name="membership_plan_id"/>
-                        <field name="membership_end_date" readonly="1"/>
-                        <field name="trainer_id"/>
-                        <field name="is_membership_expired" readonly="1"
-                               attrs="{'invisible': [('is_membership_expired','=',False)]}"
-                               class="text-danger"/>
-                    </group>
-
-                    <notebook>
-                        <page string="Payments">
-                            <field name="payment_ids">
-                                <tree>
-                                    <field name="payment_date"/>
-                                    <field name="plan_id"/>
-                                    <field name="amount"/>
-                                    <field name="payment_method"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="view_gym_member_tree" model="ir.ui.view">
-        <field name="name">gym.member.tree</field>
-        <field name="model">gym.member</field>
-        <field name="arch" type="xml">
-            <tree colors="red:is_membership_expired">
-                <field name="name"/>
-                <field name="email"/>
-                <field name="phone"/>
-                <field name="membership_plan_id"/>
-                <field name="trainer_id"/>
-                <field name="membership_end_date"/>
-                <field name="is_membership_expired"/>
-                <field name="active"/>
-            </tree>
-        </field>
-    </record>
-
-    <menuitem id="menu_member" name="Members" parent="menu_gym_root"/>
-    <act_window id="action_gym_member" name="Members"
-        res_model="gym.member" view_mode="tree,form"
-        menu_id="menu_member"/>
 </odoo>

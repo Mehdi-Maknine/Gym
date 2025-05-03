@@ -20,7 +20,7 @@ class GymDashboardController(http.Controller):
         ])
         total_payments = sum(Payment.search([]).mapped('amount'))
 
-        return request.render('gym_management.gym_dashboard_template', {
+        return request.render('gym_meliora.gym_dashboard_template', {
             'active_members': active_members,
             'upcoming_sessions': upcoming_sessions,
             'expiring_members': expiring_members,

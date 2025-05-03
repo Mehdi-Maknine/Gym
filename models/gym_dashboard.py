@@ -13,18 +13,22 @@ class GymDashboard(models.Model):
     expiring_members = fields.Integer()
     total_payments = fields.Float()
 
+
     def init(self):
-        # No table created
-        pass
-
-    @property
-    def _table_query(self):
-        # Dummy table query to satisfy Odoo ORM
-        return "(SELECT 1 AS id, 'Dashboard' AS name, 0 AS active_members, 0 AS upcoming_sessions, 0 AS expiring_members, 0.0 AS total_payments) AS gym_dashboard"
-
+        self._cr.execute("""
+                    CREATE OR REPLACE VIEW gym_dashboard AS (
+                        SELECT
+                            1 AS id,
+                            'Gym Dashboard' AS name,
+                            0 AS active_members,
+                            0 AS upcoming_sessions,
+                            0 AS expiring_members,
+                            0.0 AS total_payments
+                    )
+                """)
+    
     @classmethod
     def search(cls, args, offset=0, limit=None, order=None, count=False):
-        # Only one dashboard record is needed
         dashboard = cls._get_dashboard_data()
         return cls.browse([dashboard.id]) if dashboard else cls
 
@@ -49,8 +53,8 @@ class GymDashboard(models.Model):
         ])
         total_payments = sum(Payment.search([]).mapped('amount'))
 
-        # Create a transient record in memory
         return cls(env).new({
+            'id': 1,
             'name': 'Gym Dashboard',
             'active_members': active_members,
             'upcoming_sessions': upcoming_sessions,
