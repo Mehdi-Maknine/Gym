@@ -1,0 +1,17 @@
+<odoo>
+    <record id="email_template_membership_expiry" model="mail.template">
+        <field name="name">Membership Expiry Reminder</field>
+        <field name="model_id" ref="model_gym_member"/>
+        <field name="subject">Your Gym Membership is About to Expire</field>
+        <field name="email_from">${(user.email or 'info@gym.com')|safe}</field>
+        <field name="email_to">${object.email|safe}</field>
+        <field name="body_html" type="html">
+            <![CDATA[
+            <p>Hello ${object.name},</p>
+            <p>This is a reminder that your gym membership will expire on <strong>${object.membership_end_date}</strong>.</p>
+            <p>Please visit us or log in to renew your plan to continue enjoying our services.</p>
+            <p>Thank you,<br/>Meliora Gym</p>
+            ]]>
+        </field>
+    </record>
+</odoo>

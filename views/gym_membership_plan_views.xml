@@ -1,0 +1,34 @@
+<odoo>
+    <record id="view_gym_membership_plan_form" model="ir.ui.view">
+        <field name="name">gym.membership.plan.form</field>
+        <field name="model">gym.membership.plan</field>
+        <field name="arch" type="xml">
+            <form string="Membership Plan">
+                <group>
+                    <field name="name"/>
+                    <field name="price"/>
+                    <field name="duration_months"/>
+                    <field name="description"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_gym_membership_plan_tree" model="ir.ui.view">
+        <field name="name">gym.membership.plan.tree</field>
+        <field name="model">gym.membership.plan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="price"/>
+                <field name="duration_months"/>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem id="menu_gym_root" name="Gym Management"/>
+    <menuitem id="menu_membership_plan" name="Membership Plans" parent="menu_gym_root"/>
+    <act_window id="action_gym_membership_plan" name="Membership Plans"
+        res_model="gym.membership.plan" view_mode="tree,form"
+        menu_id="menu_membership_plan"/>
+</odoo>

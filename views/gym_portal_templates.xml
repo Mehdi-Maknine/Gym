@@ -1,0 +1,14 @@
+<odoo>
+    <template id="portal_my_home_gym" name="Gym Info" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[@id='portal_content']" position="inside">
+            <div class="mt16">
+                <h4>Your Gym Info</h4>
+                <ul class="list-unstyled">
+                    <li><strong>Plan:</strong> <t t-esc="request.env.user.partner_id.gym_member_id.membership_plan_id.name"/></li>
+                    <li><strong>Trainer:</strong> <t t-esc="request.env.user.partner_id.gym_member_id.trainer_id.name"/></li>
+                    <li><strong>Expires:</strong> <t t-esc="request.env.user.partner_id.gym_member_id.membership_end_date"/></li>
+                </ul>
+            </div>
+        </xpath>
+    </template>
+</odoo>
