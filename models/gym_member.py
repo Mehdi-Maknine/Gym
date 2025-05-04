@@ -27,6 +27,15 @@ class GymMember(models.Model):
     
     partner_id = fields.Many2one('res.partner', string='Contact')
     user_id = fields.Many2one('res.users', compute='_compute_user_id', string='Portal User', store=False)
+    membership_status_message = fields.Char(compute="_compute_status_message", string="Status Message")
+
+
+    def _compute_status_message(self):
+        for rec in self:
+            rec.membership_status_message = (
+                "⚠️ Membership has expired!" if rec.is_membership_expired else ""
+            )
+
 
 
 

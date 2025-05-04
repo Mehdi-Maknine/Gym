@@ -1,28 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- Submenu -->
-    <menuitem id="menu_gym_members" name="Members" parent="menu_gym_root" sequence="20"/>
 
-    <!-- Action -->
-    <record id="action_gym_member" model="ir.actions.act_window">
-        <field name="name">Gym Members</field>
-        <field name="res_model">gym.member</field>
-        <field name="view_mode">list,form</field>
-    </record>
-
-    <!-- Bind Action to Menu -->
-    <menuitem id="menu_action_gym_member"
-              name="Manage Members"
-              parent="menu_gym_members"
-              action="action_gym_member"
-              sequence="30"/>
 
     <!-- List View -->
     <record id="view_gym_member_list" model="ir.ui.view">
         <field name="name">gym.member.list</field>
         <field name="model">gym.member</field>
         <field name="arch" type="xml">
-            <list>
+            <list decoration-bf="is_membership_expired" class="o_list_view">
                 <field name="name"/>
                 <field name="partner_id"/> 
                 <field name="email"/>
@@ -30,7 +16,7 @@
                 <field name="membership_plan_id"/>
                 <field name="trainer_id"/>
                 <field name="membership_end_date"/>
-                <field name="is_membership_expired"/>
+                <field name="is_membership_expired" widget="boolean" />
                 <field name="active"/>
             </list>
         </field>
@@ -43,27 +29,33 @@
         <field name="arch" type="xml">
              <form string="Gym Member">
                 <sheet>
-                    <group>
-                        <field name="name"/>
-                        <field name="partner_id"/>
-                        <field name="email"/>
-                        <field name="phone"/>
-                        <field name="active"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="Member Name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+
+                    <group class="oe_inline">
+                        <field name="partner_id" widget="many2one_avatar"/>
+                        <field name="email" widget="email"/>
+                        <field name="phone" widget="phone"/>
+                        <field name="active" widget="boolean_button"/>
                     </group>
-                    <group string="Membership Info">
-                        <field name="join_date"/>
+
+                    <group string="Membership Info" class="o_td_label_align_top">
+                        <field name="join_date" widget="date"/>
                         <field name="membership_plan_id"/>
-                        <field name="membership_end_date" readonly="1"/>
+                        <field name="membership_end_date" readonly="1" widget="date"/>
                         <field name="trainer_id"/>
-                        <field name="is_membership_expired" readonly="1"/>
+                        
                     </group>
+
                     <notebook>
                         <page string="Payments">
                             <field name="payment_ids">
                                 <list>
-                                    <field name="payment_date"/>
+                                    <field name="payment_date" widget="date"/>
                                     <field name="plan_id"/>
-                                    <field name="amount"/>
+                                    <field name="amount" widget="monetary"/>
                                     <field name="payment_method"/>
                                 </list>
                             </field>
@@ -72,6 +64,14 @@
                 </sheet>
             </form>
         </field>
+    </record>
+    <menuitem id="menu_gym_members" name="Members" parent="menu_gym_root" sequence="20" action="action_gym_member"/>
+
+    <!-- Action -->
+    <record id="action_gym_member" model="ir.actions.act_window">
+        <field name="name">Gym Members</field>
+        <field name="res_model">gym.member</field>
+        <field name="view_mode">list,form</field>
     </record>
 
 </odoo>

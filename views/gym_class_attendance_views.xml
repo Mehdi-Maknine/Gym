@@ -6,10 +6,10 @@
         <field name="name">gym.class.attendance.list</field>
         <field name="model">gym.class.attendance</field>
         <field name="arch" type="xml">
-            <list>
+            <list decoration-success="status == 'present'" decoration-danger="status == 'absent'">
                 <field name="session_id"/>
                 <field name="member_id"/>
-                <field name="check_in_time"/>
+                <field name="check_in_time" widget="datetime"/>
                 <field name="status"/>
             </list>
         </field>
@@ -21,12 +21,14 @@
         <field name="model">gym.class.attendance</field>
         <field name="arch" type="xml">
             <form string="Class Attendance">
-                <group>
-                    <field name="session_id"/>
-                    <field name="member_id"/>
-                    <field name="check_in_time"/>
-                    <field name="status"/>
-                </group>
+                <sheet>
+                    <group>
+                        <field name="session_id"/>
+                        <field name="member_id"/>
+                        <field name="check_in_time" widget="datetime"/>
+                        <field name="status"/>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
