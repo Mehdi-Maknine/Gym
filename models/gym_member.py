@@ -1,6 +1,8 @@
 from odoo import models, fields, api
 from datetime import timedelta
 from datetime import date
+from dateutil.relativedelta import relativedelta
+
 
 
 class GymMember(models.Model):
@@ -21,7 +23,13 @@ class GymMember(models.Model):
         store=True
     )
     payment_ids = fields.One2many('gym.payment', 'member_id', string='Payments')
-    user_id = fields.Many2one('res.users', string='Portal User')
+    
+    
+    partner_id = fields.Many2one('res.partner', string='Contact')
+    user_id = fields.Many2one('res.users', compute='_compute_user_id', string='Portal User', store=False)
+
+
+
 
 
     
@@ -33,11 +41,19 @@ class GymMember(models.Model):
             rec.is_membership_expired = bool(rec.membership_end_date and rec.membership_end_date < today)
 
     
+    
+    
+    @api.depends('partner_id')
+    def _compute_user_id(self):
+        for rec in self:
+            rec.user_id = rec.partner_id.user_ids[:1] if rec.partner_id.user_ids else False
+            
+            
     @api.depends('join_date', 'membership_plan_id.duration_months')
     def _compute_membership_end_date(self):
         for rec in self:
-            if rec.join_date and rec.membership_plan_id:
-                rec.membership_end_date = rec.join_date + timedelta(days=30 * rec.membership_plan_id.duration_months)
+            if rec.join_date and rec.membership_plan_id and rec.membership_plan_id.duration_months:
+                rec.membership_end_date = rec.join_date + relativedelta(months=rec.membership_plan_id.duration_months)
             else:
                 rec.membership_end_date = False
 

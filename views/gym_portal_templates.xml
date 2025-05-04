@@ -8,6 +8,9 @@
                     <li><strong>Trainer:</strong> <t t-esc="request.env.user.partner_id.gym_member_id.trainer_id.name"/></li>
                     <li><strong>Expires:</strong> <t t-esc="request.env.user.partner_id.gym_member_id.membership_end_date"/></li>
                 </ul>
+                <t t-set="has_dashboard" t-value="True"/>
+                <a class="btn btn-primary mt8" href="/gym/dashboard">View Full Gym Dashboard</a>
+
             </div>
         </xpath>
     </template>

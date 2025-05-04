@@ -27,6 +27,7 @@
                     </div>
                 </div>
             </div>
+            <a href="/my" class="btn btn-secondary mt-3">Go to My Portal</a>
         </t>
     </template>
 </odoo>

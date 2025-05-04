@@ -6,6 +6,8 @@ class GymDashboard(models.Model):
     _name = 'gym.dashboard'
     _description = 'Gym Dashboard'
     _auto = False
+    _table = 'gym_dashboard_view'  # Avoid name conflict
+
 
     name = fields.Char()
     active_members = fields.Integer()
@@ -16,7 +18,7 @@ class GymDashboard(models.Model):
 
     def init(self):
         self._cr.execute("""
-                    CREATE OR REPLACE VIEW gym_dashboard AS (
+                    CREATE OR REPLACE VIEW gym_dashboard_view AS (
                         SELECT
                             1 AS id,
                             'Gym Dashboard' AS name,

@@ -8,9 +8,9 @@
         <field name="arch" type="xml">
             <kanban>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click o_kanban_card">
-                            <div class="o_kanban_primary_left">
+                    <t t-name="card">
+                        <div class="oe_card_global_click o_kanban_card">
+                            <div class="o_card_primary_left">
                                 <h3><t t-esc="record.name"/></h3>
                                 <div>Active Members: <strong><t t-esc="record.active_members"/></strong></div>
                                 <div>Upcoming Sessions: <strong><t t-esc="record.upcoming_sessions"/></strong></div>

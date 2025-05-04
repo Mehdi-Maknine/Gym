@@ -24,8 +24,14 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
+                <field name="partner_id"/> 
                 <field name="email"/>
                 <field name="phone"/>
+                <field name="membership_plan_id"/>
+                <field name="trainer_id"/>
+                <field name="membership_end_date"/>
+                <field name="is_membership_expired"/>
+                <field name="active"/>
             </list>
         </field>
     </record>
@@ -35,14 +41,34 @@
         <field name="name">gym.member.form</field>
         <field name="model">gym.member</field>
         <field name="arch" type="xml">
-            <form string="Gym Member">
+             <form string="Gym Member">
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="partner_id"/>
                         <field name="email"/>
                         <field name="phone"/>
                         <field name="active"/>
                     </group>
+                    <group string="Membership Info">
+                        <field name="join_date"/>
+                        <field name="membership_plan_id"/>
+                        <field name="membership_end_date" readonly="1"/>
+                        <field name="trainer_id"/>
+                        <field name="is_membership_expired" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Payments">
+                            <field name="payment_ids">
+                                <list>
+                                    <field name="payment_date"/>
+                                    <field name="plan_id"/>
+                                    <field name="amount"/>
+                                    <field name="payment_method"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
