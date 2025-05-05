@@ -13,14 +13,13 @@ class GymDashboard(models.TransientModel):
     total_payments = fields.Float()
 
     @api.model
-    def default_get(self, fields_list):
-        """Ensure a new record is created when the dashboard loads."""
-        res = super().default_get(fields_list)
-
+    def create_dashboard_record(self):
         today = fields.Date.context_today(self)
         in_7_days = today + timedelta(days=7)
+        self.search([]).unlink()
 
-        res.update({
+
+        dashboard = self.create({
             'active_members': self.env['gym.member'].search_count([('active', '=', True)]),
             'upcoming_sessions': self.env['gym.session'].search_count([
                 ('start_datetime', '>=', fields.Datetime.now()),
@@ -32,5 +31,17 @@ class GymDashboard(models.TransientModel):
             ]),
             'total_payments': sum(self.env['gym.payment'].search([]).mapped('amount')),
         })
+        return dashboard
 
-        return res
+    @api.model
+    def action_open_dashboard(self):
+        dashboard = self.create_dashboard_record()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Gym Dashboard',
+            'res_model': 'gym.dashboard',
+            'res_id': dashboard.id,
+            'view_mode': 'kanban',
+            'view_id': self.env.ref('gym_meliora.view_gym_dashboard_kanban').id,
+            'target': 'main',
+        }
