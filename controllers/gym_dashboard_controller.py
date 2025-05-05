@@ -1,5 +1,7 @@
-from odoo import http
+from odoo import http,fields
 from odoo.http import request
+from datetime import timedelta
+
 
 class GymDashboardController(http.Controller):
 
