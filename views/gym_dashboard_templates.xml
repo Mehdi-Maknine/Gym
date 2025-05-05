@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <template id="gym_dashboard_template">
+   <!--  <template id="gym_dashboard_template">
         <t t-call="web.layout">
             <div class="container mt16">
                 <h2>Gym Dashboard</h2>
@@ -29,5 +29,5 @@
             </div>
             <a href="/my" class="btn btn-secondary mt-3">Go to My Portal</a>
         </t>
-    </template>
+    </template> -->
 </odoo>

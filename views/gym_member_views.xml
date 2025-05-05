@@ -65,6 +65,29 @@
             </form>
         </field>
     </record>
+
+    <record id="view_gym_member_search" model="ir.ui.view">
+        <field name="name">gym.member.search</field>
+        <field name="model">gym.member</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="membership_plan_id"/>
+                <field name="trainer_id"/>
+
+                <filter name="active" string="Active" domain="[('active', '=', True)]" context="{'search_default_active': 1}"/>
+                <filter name="expired" string="Expired" domain="[('is_membership_expired', '=', True)]"/>
+
+                <group expand="1" string="Group By">
+                    <filter name="group_by_trainer" string="Trainer" context="{'group_by': 'trainer_id'}"/>
+                    <filter name="group_by_plan" string="Plan" context="{'group_by': 'membership_plan_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
     <menuitem id="menu_gym_members" name="Members" parent="menu_gym_root" sequence="20" action="action_gym_member"/>
 
     <!-- Action -->
