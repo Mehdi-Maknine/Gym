@@ -4,7 +4,7 @@
     'summary': 'Gym Application',
     'author': 'CarendaA',
     'category': 'Services',
-    'depends': ['base', 'mail', 'portal', 'website'],
+    'depends': ['base', 'mail', 'website' , 'portal'],
     'data': [
         'views/gym_menu_views.xml',
         'views/gym_member_views.xml',
@@ -20,9 +20,9 @@
         'views/gym_portal_templates.xml',
         'data/mail_template_data.xml',
         'data/ir_cron_data.xml',
+        'views/gym_dashboard_templates.xml',
     ],
     'qweb': [
-        'views/gym_dashboard_templates.xml'
     ],
     'installable': True,
     'application': True,

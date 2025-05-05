@@ -1,11 +1,11 @@
 from odoo import http,fields
 from odoo.http import request
-from datetime import timedelta
+from datetime import datetime, timedelta, date
 
 
 class GymDashboardController(http.Controller):
 
-    @http.route('/gym/dashboard', type='http', auth='user')
+    @http.route('/gym/dashboard', type='http', auth='user',  website=True)
     def gym_dashboard(self, **kw):
         Member = request.env['gym.member'].sudo()
         Session = request.env['gym.session'].sudo()
