@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- Submenu -->
-
-
     <!-- List View -->
     <record id="view_gym_member_list" model="ir.ui.view">
         <field name="name">gym.member.list</field>
         <field name="model">gym.member</field>
         <field name="arch" type="xml">
-            <list decoration-bf="is_membership_expired" class="o_list_view">
+            <list decoration-bf="is_membership_expired" decoration-success="state == 'active'" decoration-muted="state == 'draft'" decoration-danger="state == 'expired'" class="o_list_view">
                 <field name="name"/>
                 <field name="partner_id"/> 
                 <field name="email"/>
@@ -16,6 +13,8 @@
                 <field name="membership_plan_id"/>
                 <field name="trainer_id"/>
                 <field name="membership_end_date"/>
+                <field name="total_payments_display" widget="monetary"/>
+                <field name="state"  widget="badge"/>
                 <field name="is_membership_expired" widget="boolean" />
                 <field name="active"/>
             </list>
@@ -27,11 +26,38 @@
         <field name="name">gym.member.form</field>
         <field name="model">gym.member</field>
         <field name="arch" type="xml">
-             <form string="Gym Member">
-                <sheet>
+            <form string="Gym Member">
+                <header>
+                    <button name="action_set_draft" type="object" string="Set Draft" class="btn-secondary"
+                            invisible="state == 'draft'"/>
+                    <button name="action_set_active" type="object" string="Activate" class="btn-primary"
+                            invisible="state == 'active'"/>
+                    <button name="action_set_expired" type="object" string="Mark as Expired" class="btn-danger"
+                            invisible="state == 'expired'"/>
+                </header>
+
+
+               <sheet>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" string="Member Name"/>
-                        <h1><field name="name"/></h1>
+                        <h1>
+                            <field name="name"/>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,active,expired" class="ms-3"/>
+                        </h1>
+                    </div>
+
+                    <!-- Smart Buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                                name="action_open_payments"
+                                icon="fa-euro-sign"
+                                string="Total Payments"
+                                invisible="total_payments_display == 0.0"/>
+                        <button type="object"
+                                name="action_open_sessions_attended"
+                                icon="fa-calendar-alt"
+                                string="Sessions Attended"
+                                invisible="not session_ids"/>
                     </div>
 
                     <group class="oe_inline">
@@ -46,7 +72,8 @@
                         <field name="membership_plan_id"/>
                         <field name="membership_end_date" readonly="1" widget="date"/>
                         <field name="trainer_id"/>
-                        
+                        <field name="is_membership_expired"/>
+                        <field name="membership_status_message" readonly="1" invisible="not membership_status_message"/>
                     </group>
 
                     <notebook>
@@ -60,12 +87,17 @@
                                 </list>
                             </field>
                         </page>
+                        <page string="Sessions Attended">
+                            <field name="session_ids" widget="many2many_tags" readonly="1"/>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
+
+    <!-- Search View -->
     <record id="view_gym_member_search" model="ir.ui.view">
         <field name="name">gym.member.search</field>
         <field name="model">gym.member</field>
@@ -76,6 +108,7 @@
                 <field name="phone"/>
                 <field name="membership_plan_id"/>
                 <field name="trainer_id"/>
+                <field name="state"/>
 
                 <filter name="active" string="Active" domain="[('active', '=', True)]" context="{'search_default_active': 1}"/>
                 <filter name="expired" string="Expired" domain="[('is_membership_expired', '=', True)]"/>
@@ -83,18 +116,84 @@
                 <group expand="1" string="Group By">
                     <filter name="group_by_trainer" string="Trainer" context="{'group_by': 'trainer_id'}"/>
                     <filter name="group_by_plan" string="Plan" context="{'group_by': 'membership_plan_id'}"/>
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
                 </group>
             </search>
         </field>
     </record>
-    
-    <menuitem id="menu_gym_members" name="Members" parent="menu_gym_root" sequence="20" action="action_gym_member"/>
+
+    <!-- Kanban View -->
+    <record id="view_gym_member_kanban" model="ir.ui.view">
+        <field name="name">gym.member.kanban</field>
+        <field name="model">gym.member</field>
+        <field name="arch" type="xml">
+            <kanban decoration-danger="is_membership_expired" decoration-muted="not active" class="o_kanban_dashboard">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="membership_plan_id"/>
+                <field name="trainer_id"/>
+                <field name="membership_end_date"/>
+                <field name="state"/>
+                <field name="is_membership_expired"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_card p-2 shadow-sm rounded bg-white">
+                            <div class="o_kanban_card_header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong class="text-primary">
+                                        <t t-esc="record.name.value"/>
+                                    </strong>
+                                    <div class="text-muted small">
+                                        <i class="fa fa-envelope me-1"/> <t t-esc="record.email.value"/>
+                                    </div>
+                                    <div class="text-muted small">
+                                        <i class="fa fa-phone me-1"/> <t t-esc="record.phone.value"/>
+                                    </div>
+                                </div>
+                                <span t-if="record.state.raw_value"
+                                    class="badge rounded-pill"
+                                    t-attf-class="badge bg-#{record.state.raw_value == 'active' and 'success' or record.state.raw_value == 'draft' and 'secondary' or 'danger'}">
+                                    <t t-esc="record.state.value"/>
+                                </span>
+                            </div>
+
+                            <hr class="my-1"/>
+
+                            <div class="mb-1">
+                                <i class="fa fa-dumbbell me-1 text-secondary"/> <t t-esc="record.membership_plan_id.value"/>
+                            </div>
+                            <div class="mb-1">
+                                <i class="fa fa-user-tie me-1 text-secondary"/> <t t-esc="record.trainer_id.value"/>
+                            </div>
+                            <div class="text-muted small">
+                                <i class="fa fa-calendar-check me-1"/> Ends: <t t-esc="record.membership_end_date.value"/>
+                            </div>
+
+                            <div t-if="record.is_membership_expired.raw_value" class="text-danger fw-bold mt-2">
+                                ⚠️ Membership Expired
+                            </div>
+
+                            <div t-if="record.active.raw_value == false" class="text-muted mt-2 fst-italic">
+                                Archived
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
 
     <!-- Action -->
     <record id="action_gym_member" model="ir.actions.act_window">
         <field name="name">Gym Members</field>
         <field name="res_model">gym.member</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">kanban,list,form</field>
     </record>
 
+    <!-- Menu -->
+    <menuitem id="menu_gym_members" name="Members" parent="menu_gym_root" sequence="20" action="action_gym_member"/>
 </odoo>

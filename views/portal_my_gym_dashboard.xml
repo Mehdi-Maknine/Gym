@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="portal_my_gym_dashboard" name="My Gym Dashboard">
+    <t t-call="portal.portal_layout">
+      <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+      <div class="container py-5 fade-in">
+
+        <!-- Navigation -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="btn-group" role="group">
+            <a href="/my/gym" class="btn btn-outline-secondary">Home</a>
+            <a href="/my/gym/sessions" class="btn btn-outline-secondary">Sessions</a>
+            <a href="/my/gym/attendance" class="btn btn-outline-secondary">Attendance</a>
+            <a href="/my/gym/invoices" class="btn btn-outline-secondary">Payments</a>
+            <a href="/my/gym/dashboard" class="btn btn-outline-secondary active">Dashboard</a>
+            <a href="/my/gym/profile" class="btn btn-outline-secondary">Profile</a>
+          </div>
+          <button id="theme-toggle" class="btn btn-sm btn-outline-secondary">
+            🌙
+          </button>
+        </div>
+
+        <!-- Title -->
+        <h2 class="mb-4 fw-bold">📈 Gym Progress Dashboard</h2>
+
+        <!-- Key Stats Cards -->
+        <div class="row g-4 mb-5 text-center">
+          <div class="col-md-4">
+            <div class="card shadow-sm p-4 border-0">
+              <i class="fa fa-calendar-alt fa-2x text-primary mb-3"></i>
+              <h5>Total Sessions Attended</h5>
+              <h2 class="fw-bold text-success"><t t-esc="total_attended"/></h2>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card shadow-sm p-4 border-0">
+              <i class="fa fa-user-clock fa-2x text-warning mb-3"></i>
+              <h5>Last Session</h5>
+              <p class="fw-semibold"><t t-esc="last_session or '-'"/></p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card shadow-sm p-4 border-0">
+              <i class="fa fa-fire fa-2x text-danger mb-3"></i>
+              <h5>Current Streak</h5>
+              <h2 class="fw-bold text-danger"><t t-esc="streak"/> days</h2>
+            </div>
+          </div>
+        </div>
+
+        <!-- Motivational Quote -->
+        <div class="alert alert-secondary text-center fs-5 shadow-sm">
+          <t t-esc="motivational_quote"/>
+        </div>
+
+        <!-- Badge Display -->
+        <div class="card shadow-sm p-4 mt-5 border-0">
+          <h5 class="mb-3">🏅 Achievements</h5>
+          <t t-if="badges">
+            <div class="d-flex flex-wrap gap-3">
+              <t t-foreach="badges" t-as="badge">
+                <span class="badge bg-primary text-white fs-6 px-3 py-2">
+                  <t t-esc="badge"/>
+                </span>
+              </t>
+            </div>
+          </t>
+          <t t-if="not badges">
+            <div class="text-muted">No badges earned yet. Start attending!</div>
+          </t>
+        </div>
+
+        <!-- Attendance Trend Chart -->
+        <div class="card shadow-sm p-4 mb-5 border-0">
+          <h5 class="mb-3">📊 Monthly Attendance Trend</h5>
+          <canvas id="attendanceChart"
+                class="w-100"
+                height="300"
+                t-att-data-labels="json.dumps(chart_labels)"
+                t-att-data-values="json.dumps(chart_values)">
+          </canvas>
+        </div>
+
+
+      </div>
+    </t>
+  
+
+  </template>
+</odoo>

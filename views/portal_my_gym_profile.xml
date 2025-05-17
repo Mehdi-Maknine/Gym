@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="portal_my_gym_profile" name="Edit Profile">
+    <t t-call="portal.portal_layout">
+      <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+      <div class="container py-5 fade-in">
+
+        <!-- Navigation Bar -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="btn-group" role="group">
+            <a href="/my/gym" class="btn btn-outline-secondary">Home</a>
+            <a href="/my/gym/sessions" class="btn btn-outline-secondary">Sessions</a>
+            <a href="/my/gym/attendance" class="btn btn-outline-secondary">Attendance</a>
+            <a href="/my/gym/invoices" class="btn btn-outline-secondary">Payments</a>
+            <a href="/my/gym/dashboard" class="btn btn-outline-secondary">Dashboard</a>
+            <a href="/my/gym/profile" class="btn btn-outline-secondary active">Profile</a>
+          </div>
+          <button id="theme-toggle" class="btn btn-sm btn-outline-secondary" title="Toggle Light/Dark Mode">
+            🌙
+          </button>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-3">
+            <t t-if="member.partner_id.image_1920">
+              <img t-att-src="'data:image/png;base64,%s' % member.partner_id.image_1920"
+                  class="rounded-circle shadow-sm mb-3"
+                  style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #ccc;"/>
+            </t>
+            <h2 class="mb-0">Welcome, <t t-esc="request.env.user.name"/> 👋</h2>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <h2 class="mb-4 fw-bold">👤 My Profile</h2>
+
+        <!-- Profile Form -->
+        <t t-if="member">
+          <form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm border-0">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+            <!-- Avatar Upload -->
+            <div class="mb-3 d-flex align-items-center gap-3">
+              <img t-att-src="'data:image/png;base64,%s' % member.partner_id.image_1920"
+                  class="rounded-circle border shadow-sm"
+                  style="width: 64px; height: 64px; object-fit: cover;"
+                  alt="Your Avatar"/>
+              <div class="flex-grow-1">
+                <label class="form-label fw-semibold">Profile Picture</label>
+                <input type="file" name="avatar" accept="image/*" class="form-control"/>
+              </div>
+            </div>
+
+            <!-- Other Fields -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Full Name</label>
+              <input type="text" name="name" t-att-value="member.name" class="form-control"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Email</label>
+              <input type="email" name="email" t-att-value="member.email" class="form-control"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Phone</label>
+              <input type="text" name="phone" t-att-value="member.phone" class="form-control"/>
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary px-4">
+                💾 Save Changes
+              </button>
+            </div>
+          </form>
+        </t>
+
+
+        <!-- Fallback -->
+        <t t-if="not member">
+          <div class="alert alert-warning shadow-sm mt-4">
+            No gym member record found for your account.
+          </div>
+        </t>
+        <t t-if="toast_message">
+          <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+            <div class="toast show text-white bg-success border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="d-flex">
+                <div class="toast-body fw-semibold">
+                  <t t-esc="toast_message"/>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+            </div>
+          </div>
+        </t>
+
+      </div>
+    </t>
+  </template>
+</odoo>

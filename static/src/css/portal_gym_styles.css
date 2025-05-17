@@ -1,0 +1,233 @@
+/* Example styling */
+.card {
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.text-purple {
+    color: #6f42c1;
+}
+.text-green {
+    color: #28a745;
+}
+.card h4 {
+    font-weight: 600;
+}
+.card i.fa {
+    color: var(--gym-primary);
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+      height: 300px !important;
+      text-align: center;
+    }
+}
+
+.table th {
+    font-weight: 600;
+}
+.badge {
+    font-size: 0.9rem;
+    border-radius: 1rem;
+}
+    
+
+
+:root {
+    --meliora-primary: #4B00B7;
+    --meliora-accent: #FF5A5F;
+    --meliora-bg: #f8f9fa;
+    --meliora-dark: #111;
+    --meliora-light: #fff;
+    --meliora-text: #333;
+    --card-radius: 0.8rem;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--meliora-bg);
+    color: var(--meliora-text);
+}
+
+.card, .table {
+    border-radius: var(--card-radius);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.05);
+}
+
+.btn-outline-primary,
+.btn-primary {
+    border-radius: 50px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover,
+.btn-primary:hover {
+    transform: scale(1.05);
+    background-color: var(--meliora-primary);
+    color: white;
+}
+
+.theme-dark {
+    --meliora-bg: #181818;
+    --meliora-text: #eee;
+    --meliora-card: #222;
+    background-color: var(--meliora-bg);
+    color: var(--meliora-text);
+}
+
+.theme-dark .card,
+.theme-dark .table {
+    background-color: var(--meliora-card);
+    color: var(--meliora-text);
+}
+
+.theme-dark {
+    --meliora-bg: #121212;
+    --meliora-card: #1e1e1e;
+    --meliora-text: #e0e0e0;
+  }
+  
+  .theme-dark body {
+    background-color: var(--meliora-bg) !important;
+    color: var(--meliora-text) !important;
+  }
+  
+  .theme-dark .card,
+  .theme-dark .table,
+  .theme-dark .bg-light,
+  .theme-dark .shadow-sm,
+  .theme-dark .form-control,
+  .theme-dark .btn {
+    background-color: var(--meliora-card) !important;
+    color: var(--meliora-text) !important;
+    border-color: #444 !important;
+  }
+  
+  .theme-dark .table thead,
+  .theme-dark .table thead th {
+    background-color: #333 !important;
+    color: #fff !important;
+  }
+  
+  .theme-dark input::placeholder {
+    color: #bbb;
+  }
+  
+.theme-dark .btn,
+.theme-dark .form-control {
+  background-color: #222 !important;
+  color: #eee !important;
+}
+
+
+/* 💡 Dark theme background fix */
+.theme-dark .container {
+    background-color: var(--meliora-bg) !important;
+    color: var(--meliora-text) !important;
+}
+
+/* Override headings */
+.theme-dark h1,
+.theme-dark h2,
+.theme-dark h3,
+.theme-dark h4,
+.theme-dark h5,
+.theme-dark h6 {
+    color: var(--meliora-text) !important;
+}
+
+/* Buttons, forms, alerts */
+.theme-dark .btn-outline-secondary {
+    background-color: transparent;
+    color: #ccc;
+    border-color: #666;
+}
+.theme-dark .btn-outline-secondary:hover {
+    background-color: #444;
+    color: #fff;
+    border-color: #888;
+}
+.theme-dark .alert-info {
+    background-color: #222;
+    color: #bbb;
+    border-color: #444;
+}
+
+/* ✍️ Global text improvements */
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  /* 🔠 Headings */
+h1, h2, h3, h4, h5 {
+    font-weight: 600;
+    color: var(--meliora-text);
+    letter-spacing: -0.3px;
+}
+
+  /* 🌈 Animations */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn ease-in-out 1s forwards;
+}
+@keyframes fadeIn {
+to {
+    opacity: 1;
+}
+}
+
+.btn {
+    transition: all 0.25s ease-in-out;
+}
+
+.btn-lg {
+    padding: 0.75rem 2rem;
+    font-size: 1.2rem;
+}
+
+.btn-gradient {
+    background: linear-gradient(to right, #6f42c1, #9d50bb);
+    color: #fff;
+    border: none;
+}
+.btn-gradient:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+
+.hero-section {
+    background-blend-mode: overlay;
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(255,255,255,0.05);
+}
+  
+.card {
+    border: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+.card:hover {
+    transform: translateY(-5px);
+}
+
+h2 {
+    margin-top: 2rem;
+  }
+  
+#theme-toggle {
+    border-radius: 50px;
+    padding: 6px 16px;
+    font-weight: 500;
+}
+
+html, body {
+    background-color: var(--meliora-bg) !important;
+  }
+  

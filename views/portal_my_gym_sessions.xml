@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="portal_my_gym_sessions" name="My Sessions">
+    <t t-call="portal.portal_layout">
+      <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+      <div class="container py-5 fade-in">
+
+        <!-- Navigation with Tooltips -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="btn-group" role="group">
+            <a href="/my/gym" class="btn btn-outline-secondary" title="Return to homepage">Home</a>
+            <a href="/my/gym/sessions" class="btn btn-outline-secondary active" title="Your booked sessions">Sessions</a>
+            <a href="/my/gym/attendance" class="btn btn-outline-secondary" title="View attendance">Attendance</a>
+            <a href="/my/gym/invoices" class="btn btn-outline-secondary" title="Payment history">Payments</a>
+            <a href="/my/gym/dashboard" class="btn btn-outline-secondary" title="Track progress">Dashboard</a>
+            <a href="/my/gym/profile" class="btn btn-outline-secondary" title="Edit your profile">Profile</a>
+          </div>
+          <button id="theme-toggle" class="btn btn-sm btn-outline-secondary" title="Toggle light/dark mode">
+            🌙
+          </button>
+        </div>
+         <!-- Calendar Display -->
+        <div class="card shadow-sm p-4 mb-5" t-if="calendar_events">
+          <h4 class="mb-3">📅 Calendar View</h4>
+          <div id="gym-session-calendar" t-att-data-events="calendar_events" style="min-height: 500px;"></div>
+        </div>
+
+
+        <!-- Title -->
+        <h2 class="mb-4 fw-bold">📅 My Upcoming Sessions</h2>
+
+        <!-- Session Table -->
+        <t t-if="sessions">
+          <div class="card shadow-sm border-0 p-3">
+            <table class="table table-hover table-striped align-middle mb-0">
+              <thead class="table-dark text-white">
+                <tr>
+                  <th title="Class title">🏷️ Session</th>
+                  <th title="Instructor name">🧑‍🏫 Trainer</th>
+                  <th title="Start date and time">📅 Start</th>
+                  <th title="Session duration in hours">⏱️ Duration</th>
+                  <th title="Session type or room">📍 Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                <t t-foreach="sessions" t-as="session">
+                  <tr>
+                    <td class="fw-semibold"><t t-esc="session.name"/></td>
+                    <td><t t-esc="session.trainer_id.name or '-'"/></td>
+                    <td><t t-esc="session.start_datetime.strftime('%d %b %Y, %H:%M')"/></td>
+                    <td><t t-esc="('%.1f' % session.duration) + ' hrs'"/></td>
+                    <td><t t-esc="session.class_type_id.name or '—'"/></td>
+                  </tr>
+                </t>
+              </tbody>
+            </table>
+          </div>
+        </t>
+
+        <!-- Empty State -->
+        <t t-if="not sessions">
+          <div class="alert alert-info shadow-sm mt-4 fade-in">
+            You haven’t booked any sessions yet.
+          </div>
+        </t>
+       
+
+      </div>
+    </t>
+  </template>
+</odoo>

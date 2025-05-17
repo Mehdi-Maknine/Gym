@@ -8,3 +8,4 @@ access_gym_payment,gym.payment,model_gym_payment,,1,1,1,1
 access_gym_class_type,gym.class.type,model_gym_class_type,,1,1,1,1
 access_gym_dashboard,gym.dashboard,model_gym_dashboard,,1,1,1,1
 access_gym_member_portal,gym.member,model_gym_member,base.group_portal,1,0,0,0
+access_portal_gym_member,gym.member,model_gym_member,base.group_portal,1,0,0,0

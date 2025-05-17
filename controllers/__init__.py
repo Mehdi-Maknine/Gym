@@ -1,1 +1,1 @@
-from . import gym_dashboard_controller
+from . import portal_gym_home

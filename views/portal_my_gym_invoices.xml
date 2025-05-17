@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="portal_my_gym_invoices" name="My Invoices">
+    <t t-call="portal.portal_layout">
+      <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+      <div class="container py-5 fade-in">
+
+        <!-- Navigation -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="btn-group" role="group">
+            <a href="/my/gym" class="btn btn-outline-secondary">Home</a>
+            <a href="/my/gym/sessions" class="btn btn-outline-secondary">Sessions</a>
+            <a href="/my/gym/attendance" class="btn btn-outline-secondary">Attendance</a>
+            <a href="/my/gym/invoices" class="btn btn-outline-secondary active">Payments</a>
+            <a href="/my/gym/dashboard" class="btn btn-outline-secondary">Dashboard</a>
+            <a href="/my/gym/profile" class="btn btn-outline-secondary">Profile</a>
+          </div>
+          <button id="theme-toggle" class="btn btn-sm btn-outline-secondary">
+            🌙
+          </button>
+        </div>
+
+        <!-- Title -->
+        <h2 class="mb-4 fw-bold">🧾 My Payments</h2>
+
+        <!-- Payment Table -->
+        <t t-if="payments">
+          <div class="card p-3 shadow-sm border-0">
+            <table class="table table-hover table-striped align-middle mb-0">
+              <thead class="table-dark text-white">
+                <tr>
+                  <th title="Date of payment">📅 Date</th>
+                  <th title="Plan membership or class entry">🏷️ Plan / Session</th>
+                  <th title="Payment method">💳 Method</th>
+                  <th class="text-end">💰 Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <t t-foreach="payments" t-as="payment">
+                  <tr>
+                    <td><t t-esc="payment.payment_date.strftime('%d %b %Y')"/></td>
+                    <td><t t-esc="payment.note or '-'"/></td>
+                    <td><t t-esc="payment.payment_method or '—'"/></td>
+                    <td class="text-end fw-semibold"><t t-esc="'€ %.2f' % payment.amount"/></td>
+                  </tr>
+                </t>
+              </tbody>
+            </table>
+          </div>
+        </t>
+
+        <!-- Empty State -->
+        <t t-if="not payments">
+          <div class="alert alert-info shadow-sm mt-4">
+            You haven’t made any payments yet.
+          </div>
+        </t>
+
+      </div>
+    </t>
+  </template>
+</odoo>
