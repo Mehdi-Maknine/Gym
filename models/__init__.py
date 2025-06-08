@@ -7,3 +7,5 @@ from . import gym_payment
 from . import gym_class_type
 from . import gym_dashboard
 from . import ext_res_partners
+from . import gym_workout_tip
+from . import gym_feed_message

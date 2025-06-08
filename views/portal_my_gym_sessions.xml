@@ -2,24 +2,11 @@
 <odoo>
   <template id="portal_my_gym_sessions" name="My Sessions">
     <t t-call="portal.portal_layout">
+      <t t-call="gym_meliora.gym_portal_navbar"/>
       <t t-set="breadcrumbs_searchbar" t-value="True"/>
 
       <div class="container py-5 fade-in">
 
-        <!-- Navigation with Tooltips -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="btn-group" role="group">
-            <a href="/my/gym" class="btn btn-outline-secondary" title="Return to homepage">Home</a>
-            <a href="/my/gym/sessions" class="btn btn-outline-secondary active" title="Your booked sessions">Sessions</a>
-            <a href="/my/gym/attendance" class="btn btn-outline-secondary" title="View attendance">Attendance</a>
-            <a href="/my/gym/invoices" class="btn btn-outline-secondary" title="Payment history">Payments</a>
-            <a href="/my/gym/dashboard" class="btn btn-outline-secondary" title="Track progress">Dashboard</a>
-            <a href="/my/gym/profile" class="btn btn-outline-secondary" title="Edit your profile">Profile</a>
-          </div>
-          <button id="theme-toggle" class="btn btn-sm btn-outline-secondary" title="Toggle light/dark mode">
-            🌙
-          </button>
-        </div>
          <!-- Calendar Display -->
         <div class="card shadow-sm p-4 mb-5" t-if="calendar_events">
           <h4 class="mb-3">📅 Calendar View</h4>

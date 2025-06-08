@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Action -->
+  <record id="action_gym_feed_message" model="ir.actions.act_window">
+    <field name="name">Gym Feed Messages</field>
+    <field name="res_model">gym.feed.message</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <!-- Menu -->
+  <menuitem id="menu_gym_feed_root"
+            name="Gym Feed"
+            parent="menu_gym_root"
+            sequence="60"
+            action="action_gym_feed_message"/>
+
+  <!-- Tree View -->
+  <record id="view_gym_feed_message_tree" model="ir.ui.view">
+    <field name="name">gym.feed.message.tree</field>
+    <field name="model">gym.feed.message</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="title"/>
+        <field name="date_posted"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- Form View -->
+  <record id="view_gym_feed_message_form" model="ir.ui.view">
+    <field name="name">gym.feed.message.form</field>
+    <field name="model">gym.feed.message</field>
+    <field name="arch" type="xml">
+      <form string="Gym Feed Message">
+        <sheet>
+          <group>
+            <field name="title"/>
+            <field name="date_posted"/>
+            <field name="active"/>
+            <field name="image" widget="image" class="oe_avatar"/>
+            <field name="content"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+</odoo>

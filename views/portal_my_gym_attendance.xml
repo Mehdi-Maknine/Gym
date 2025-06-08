@@ -2,23 +2,9 @@
 <odoo>
   <template id="portal_my_gym_attendance" name="My Attendance">
     <t t-call="portal.portal_layout">
+      <t t-call="gym_meliora.gym_portal_navbar"/>
       <t t-set="breadcrumbs_searchbar" t-value="True"/>
       <div class="container py-5 fade-in">
-
-        <!-- Navigation -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="btn-group" role="group">
-            <a href="/my/gym" class="btn btn-outline-secondary">Home</a>
-            <a href="/my/gym/sessions" class="btn btn-outline-secondary">Sessions</a>
-            <a href="/my/gym/attendance" class="btn btn-outline-secondary active">Attendance</a>
-            <a href="/my/gym/invoices" class="btn btn-outline-secondary">Payments</a>
-            <a href="/my/gym/dashboard" class="btn btn-outline-secondary">Dashboard</a>
-            <a href="/my/gym/profile" class="btn btn-outline-secondary">Profile</a>
-          </div>
-          <button id="theme-toggle" class="btn btn-sm btn-outline-secondary">
-            🌙
-          </button>
-        </div>
 
         <!-- Title -->
         <h2 class="mb-4 fw-bold">📌 My Attendance History</h2>

@@ -7,5 +7,8 @@ access_gym_class_attendance,gym.class.attendance,model_gym_class_attendance,,1,1
 access_gym_payment,gym.payment,model_gym_payment,,1,1,1,1
 access_gym_class_type,gym.class.type,model_gym_class_type,,1,1,1,1
 access_gym_dashboard,gym.dashboard,model_gym_dashboard,,1,1,1,1
-access_gym_member_portal,gym.member,model_gym_member,base.group_portal,1,0,0,0
-access_portal_gym_member,gym.member,model_gym_member,base.group_portal,1,0,0,0
+access_gym_member_portal,gym.member,model_gym_member,base.group_portal,1,1,1,1
+access_portal_gym_member,gym.member,model_gym_member,base.group_portal,1,1,1,1
+access_gym_workout_tip,gym.workout.tip,model_gym_workout_tip,,1,1,1,1
+access_gym_feed_message,gym.feed.message,model_gym_feed_message,,1,1,1,1
+

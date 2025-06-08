@@ -66,6 +66,7 @@
                 <field name="per_day_cost"/>
                 <field name="member_count"/>
                 <field name="active"/>
+                <field name="description"/>
 
                 <templates>
                     <t t-name="kanban-box">

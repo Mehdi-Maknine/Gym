@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve" owl="1">
+  <t t-name="gym_meliora.GymPortalHome">
+    <div class="text-center p-5 bg-success text-white">
+      <h2>✅ OWL Official Mount</h2>
+      <p t-esc="props.greetings"/>
+    </div>
+  </t>
+</templates>
+
