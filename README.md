@@ -116,7 +116,7 @@ All React pages will **mirror or enhance Odoo backend functionality**, with full
 📁 Location:
 ```bash
 /custom_addons/gym_meliora/static/src/reactpages/
-
+```
 
 
 📄 Licensed under CC BY-NC-ND 4.0  
