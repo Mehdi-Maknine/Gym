@@ -118,6 +118,7 @@ All React pages will **mirror or enhance Odoo backend functionality**, with full
 /custom_addons/gym_meliora/static/src/reactpages/
 ```
 
+[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
 📄 Licensed under CC BY-NC-ND 4.0  
 You may share this project with credit, but not use it commercially or modify it.  
