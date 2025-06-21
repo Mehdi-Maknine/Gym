@@ -30,7 +30,7 @@ class GymMembershipPlan(models.Model):
 
     def _compute_duration_label(self):
         for plan in self:
-            plan.duration_label = f"{plan.duration_months} month(s)" if plan.duration_months else "N/A"
+            plan.duration_label = f"{plan.duration_months} month(s)" if plan.duration_months else "1 Day"
 
     def unlink(self):
         for plan in self:

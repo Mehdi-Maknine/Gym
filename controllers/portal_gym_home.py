@@ -4,6 +4,7 @@ from collections import defaultdict
 from datetime import date, timedelta
 import json
 import base64
+from werkzeug.wrappers import Response
 
 
 class GymPortal(http.Controller):
@@ -276,3 +277,30 @@ class GymPortal(http.Controller):
             'attendance_records': attendance_records,
             'payments': payments,
         })
+        
+        
+        
+    @http.route('/api/memberships', type='http', auth='public')
+    def get_memberships(self):
+        plans = request.env['gym.membership.plan'].sudo().search([], order='price asc')
+        result = []
+        for plan in plans:
+            result.append({
+                'id': plan.id,
+                'name': plan.name,
+                'price': plan.price,
+                'duration_months': plan.duration_months,
+                'description': plan.description,
+                'per_day_cost': plan.per_day_cost,
+                'duration_label': plan.duration_label,
+                'member_count': plan.member_count,
+            })
+
+        headers = [
+            ('Content-Type', 'application/json'),
+            ('Access-Control-Allow-Origin', '*'),
+            ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+            ('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept'),
+        ]
+
+        return Response(json.dumps({'memberships': result}), headers=headers)

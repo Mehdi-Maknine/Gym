@@ -11,7 +11,6 @@
         'gym_meliora/static/src/js/portal_theme_toggle.js',
         'gym_meliora/static/src/css/portal_gym_styles.css',
         'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-        #'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
         'https://cdn.jsdelivr.net/npm/chart.js',
         'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js',
         'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css',
@@ -19,6 +18,7 @@
         'gym_meliora/static/src/js/portal_dashboard_chart.js',
         'gym_meliora/static/src/js/gym_portal_home.js',
         'gym_meliora/static/src/js/gym_base_layout.js',
+        
         #'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap',
        # 'gym_meliora/static/src/xml/gym_portal_home.xml',
         
