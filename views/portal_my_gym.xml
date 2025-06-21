@@ -1,0 +1,10 @@
+<odoo>
+  <template id="portal_my_gym_homepage" name="My Gym Portal">
+    <t t-call="portal.portal_layout">
+      <owl-component name="gym_meliora.GymPortalHome"
+               t-att-props="props"/>
+
+
+    </t>
+  </template>
+</odoo>

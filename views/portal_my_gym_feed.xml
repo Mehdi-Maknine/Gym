@@ -1,0 +1,70 @@
+<odoo>
+  <template id="portal_my_gym_feed" name="Gym Feed">
+    <t t-call="portal.portal_layout">
+      <t t-call="gym_meliora.gym_portal_navbar"/> 
+      <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+      <div class="container py-5 fade-in">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold">📢 Gym Activity Feed</h2>
+        </div>
+
+        <div class="row g-4">
+          <!-- Public News Feed -->
+          <div class="col-lg-7">
+            <h4 class="mb-3">📣 News &amp; Announcements</h4>
+            <t t-if="public_feed">
+              <t t-foreach="public_feed" t-as="message">
+                <div class="card shadow-sm mb-4 border-0">
+                  <t t-if="message.image">
+                    <img t-att-src="'data:image/png;base64,%s' % message.image.decode()" class="card-img-top" style="object-fit: cover; max-height: 250px;" />
+                  </t>
+                  <div class="card-body">
+                    <h5 class="card-title fw-bold"><t t-esc="message.title" /></h5>
+                    <p class="card-text"><t t-esc="message.content" /></p>
+                    <small class="text-muted">
+                      <t t-esc="message.date_posted.strftime('%d %b %Y, %H:%M')" />
+                    </small>
+                  </div>
+                </div>
+              </t>
+            </t>
+            <t t-if="not public_feed">
+              <div class="alert alert-info">No news has been posted yet.</div>
+            </t>
+          </div>
+
+          <!-- Private Feed -->
+          <div class="col-lg-5">
+            <h4 class="mb-3">🧍 Your Activity</h4>
+            <ul class="list-group shadow-sm">
+              <!-- Attendance -->
+              <t t-if="attendance_records">
+                <t t-foreach="attendance_records" t-as="a">
+                  <li class="list-group-item">
+                    ✅ Attended <strong><t t-esc="a.session_id.name" /></strong>
+                    on <t t-esc="a.session_id.start_datetime.strftime('%d %b %Y')" />
+                  </li>
+                </t>
+              </t>
+              <!-- Payments -->
+              <t t-if="payments">
+                <t t-foreach="payments" t-as="p">
+                  <li class="list-group-item">
+                    💰 Paid <strong><t t-esc="'€ %.2f' % p.amount" /></strong>
+                    on <t t-esc="p.payment_date.strftime('%d %b %Y')" /> – <t t-esc="p.note or 'No note'" />
+                  </li>
+                </t>
+              </t>
+              <!-- No history -->
+              <t t-if="not attendance_records and not payments">
+                <li class="list-group-item text-muted">No activity found yet.</li>
+              </t>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </t>
+  </template>
+</odoo>

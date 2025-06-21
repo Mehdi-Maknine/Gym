@@ -6,16 +6,54 @@
         <field name="name">gym.dashboard.kanban</field>
         <field name="model">gym.dashboard</field>
         <field name="arch" type="xml">
-            <kanban>
+            <kanban class="o_kanban_dashboard">
+                <field name="active_members"/>
+                <field name="upcoming_sessions"/>
+                <field name="expiring_members"/>
+                <field name="total_payments"/>
                 <templates>
-                    <t t-name="card">
-                        <div class="oe_card_global_click o_kanban_card">
-                            <div class="o_card_primary_left">
-                                <h3><t t-esc="record.name"/></h3>
-                                <div>Active Members: <strong><t t-esc="record.active_members"/></strong></div>
-                                <div>Upcoming Sessions: <strong><t t-esc="record.upcoming_sessions"/></strong></div>
-                                <div>Expiring Memberships: <strong><t t-esc="record.expiring_members"/></strong></div>
-                                <div>Total Payments: €<strong><t t-esc="record.total_payments"/></strong></div>
+                    <t t-name="kanban-box">
+                        <div class="o_card shadow p-3 rounded" style="min-width: 100%; max-width: 100%;">
+                            <div class="d-flex justify-content-around flex-wrap gap-4">
+
+                                <!-- Active Members -->
+                                <a t-attf-href="/web#model=gym.member&amp;view_type=list&amp;search_default_active=1"
+                                   class="text-decoration-none">
+                                    <div class="alert alert-success text-center p-3 rounded shadow-sm" style="width: 180px;">
+                                        <i class="fa fa-users fa-lg mb-2 d-block"></i>
+                                        <strong><t t-esc="record.active_members.value"/></strong><br/>
+                                        <span>Active Members</span>
+                                    </div>
+                                </a>
+
+                                <!-- Upcoming Sessions -->
+                                <a t-attf-href="/web#model=gym.session&amp;view_type=list"
+                                   class="text-decoration-none">
+                                    <div class="alert alert-info text-center p-3 rounded shadow-sm" style="width: 180px;">
+                                        <i class="fa fa-calendar-alt fa-lg mb-2 d-block"></i>
+                                        <strong><t t-esc="record.upcoming_sessions.value"/></strong><br/>
+                                        <span>Upcoming Sessions</span>
+                                    </div>
+                                </a>
+
+                                <!-- Expiring Soon -->
+                                <a t-attf-href="/web#model=gym.member&amp;view_type=list"
+                                   class="text-decoration-none">
+                                    <div t-attf-class="alert text-center p-3 rounded shadow-sm #{record.expiring_members &gt; 5 and 'alert-danger' or 'alert-warning'}"
+                                         style="width: 180px;">
+                                        <i class="fa fa-exclamation-circle fa-lg mb-2 d-block"></i>
+                                        <strong><t t-esc="record.expiring_members.value"/></strong><br/>
+                                        <span>Expiring Soon</span>
+                                    </div>
+                                </a>
+
+                                <!-- Total Payments -->
+                                <div class="alert alert-primary text-center p-3 rounded shadow-sm" style="width: 180px;">
+                                    <i class="fa fa-euro-sign fa-lg mb-2 d-block"></i>
+                                    <strong><t t-esc="record.total_payments.value"/> €</strong><br/>
+                                    <span>Total Payments</span>
+                                </div>
+
                             </div>
                         </div>
                     </t>
@@ -25,14 +63,20 @@
     </record>
 
     <!-- Action -->
-    <record id="action_gym_dashboard_kanban" model="ir.actions.act_window">
-        <field name="name">Gym Dashboard</field>
-        <field name="res_model">gym.dashboard</field>
-        <field name="view_mode">kanban</field>
-        <field name="target">main</field>
+    <record id="action_open_gym_dashboard" model="ir.actions.server">
+        <field name="name">Open Gym Dashboard</field>
+        <field name="model_id" ref="model_gym_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_dashboard()</field>
     </record>
 
+
     <!-- Menu Item -->
-    <menuitem id="menu_gym_dashboard" name="Dashboard" parent="menu_gym_root" sequence="1" action="action_gym_dashboard_kanban"/>
+    <menuitem id="menu_gym_dashboard"
+            name="Dashboard"
+            parent="menu_gym_root"
+            sequence="1"
+            action="action_open_gym_dashboard"/>
+
 
 </odoo>

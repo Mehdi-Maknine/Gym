@@ -1,0 +1,8 @@
+<odoo>
+  <template id="gym_portal_assets" name="Gym Portal Styles" inherit_id="web.assets_frontend">
+    <xpath expr="." position="inside">
+      <link rel="stylesheet" type="text/css" href="/gym_meliora/static/src/css/portal_gym_styles.css"/>
+      <script type="text/javascript" src="/gym_meliora/static/src/js/portal_theme_toggle.js"/>
+    </xpath>
+  </template>
+</odoo>

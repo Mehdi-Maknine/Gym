@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-
-    <!-- Membership Plan Menu -->
-
     <!-- Action Window -->
     <record id="action_gym_membership_plan" model="ir.actions.act_window">
         <field name="name">Membership Plans</field>
         <field name="res_model">gym.membership.plan</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_gym_membership_plan_search"/>
     </record>
 
-    <menuitem id="menu_membership_plan" name="Membership Plans" parent="menu_gym_root" action="action_gym_membership_plan"/>
-    
-              
+    <!-- Menu Item -->
+    <menuitem id="menu_membership_plan"
+              name="Membership Plans"
+              parent="menu_gym_root"
+              action="action_gym_membership_plan"/>
+
+    <!-- List View -->
+    <record id="view_gym_membership_plan_tree" model="ir.ui.view">
+        <field name="name">gym.membership.plan.tree</field>
+        <field name="model">gym.membership.plan</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="not active">
+                <field name="name"/>
+                <field name="price" widget="monetary"/>
+                <field name="duration_months"/>
+                <field name="per_day_cost" widget="float"/>
+                <field name="member_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
 
     <!-- Form View -->
     <record id="view_gym_membership_plan_form" model="ir.ui.view">
@@ -21,26 +37,84 @@
         <field name="model">gym.membership.plan</field>
         <field name="arch" type="xml">
             <form string="Membership Plan">
-                <group>
-                    <field name="name"/>
-                    <field name="price"/>
-                    <field name="duration_months"/>
-                    <field name="description"/>
-                </group>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="price" widget="monetary"/>
+                        <field name="duration_months"/>
+                        <field name="duration_label" readonly="1"/>
+                        <field name="per_day_cost" readonly="1"/>
+                        <field name="member_count" readonly="1"/>
+                        <field name="description"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
 
-    <!-- List View -->
-    <record id="view_gym_membership_plan_tree" model="ir.ui.view">
-        <field name="name">gym.membership.plan.tree</field>
+    <!-- Kanban View -->
+    <record id="view_gym_membership_plan_kanban" model="ir.ui.view">
+        <field name="name">gym.membership.plan.kanban</field>
         <field name="model">gym.membership.plan</field>
         <field name="arch" type="xml">
-            <list>
+            <kanban decoration-muted="not active">
                 <field name="name"/>
                 <field name="price"/>
                 <field name="duration_months"/>
-            </list>
+                <field name="duration_label"/>
+                <field name="per_day_cost"/>
+                <field name="member_count"/>
+                <field name="active"/>
+                <field name="description"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_card p-2 shadow-sm rounded bg-white">
+                            <strong class="text-primary"><t t-esc="record.name.value"/></strong>
+                            <div t-attf-class="badge rounded-pill mt-1 bg-#{record.price.raw_value &gt;= 100 and 'information' or 'warning'}">
+                                € <t t-esc="record.price.value"/>
+                            </div>
+                            <div class="text-muted small mb-1">
+                                <t t-esc="record.duration_months.value"/> Duration (months)
+                            </div>
+                            <div class="text-muted small mb-1">
+                                💸 <strong>€<t t-esc="record.per_day_cost.value"/> / day</strong>
+                            </div>
+                            <div class="text-muted small mb-1">
+                                👥 Used by <t t-esc="record.member_count.value"/> members
+                            </div>
+                            <div t-if="record.active.raw_value == false" class="text-muted small fst-italic">
+                                Archived
+                            </div>
+                            <div class="text-muted small" t-att-title="record.description.value">
+                                <i class="fa fa-info-circle me-1"/> Hover for details
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+
+
+    <!-- Search View -->
+    <record id="view_gym_membership_plan_search" model="ir.ui.view">
+        <field name="name">gym.membership.plan.search</field>
+        <field name="model">gym.membership.plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="price"/>
+                <field name="duration_months"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <group expand="1" string="Group By">
+                    <filter name="group_by_duration" string="Duration" context="{'group_by': 'duration_months'}"/>
+                    <filter name="group_by_active" string="Active/Inactive" context="{'group_by': 'active'}"/>
+                </group>
+            </search>
         </field>
     </record>
 

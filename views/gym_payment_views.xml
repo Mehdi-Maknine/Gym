@@ -1,49 +1,140 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<odoo>
-    <!-- Menu for Payments under Gym -->
+     <!--  <!-- Hero Section -->
+      <section class="position-relative text-white mb-5 overflow-hidden hero-section" style="background-image: url('/gym_meliora/static/src/img/hero_gym.jpg');">
+        <div class="overlay"></div>
+        <div class="container text-center d-flex flex-column justify-content-center align-items-center h-100">
+          <h1 class="display-4 fw-bold animated-title" data-aos="fade-down">Welcome to Meliora Gym</h1>
+          <p class="lead fst-italic" data-aos="fade-up">Your progress, your pace.</p>
+        </div>
+      </section>
 
-    <!-- Action -->
-    <record id="action_gym_payment" model="ir.actions.act_window">
-        <field name="name">Payments</field>
-        <field name="res_model">gym.payment</field>
-        <field name="view_mode">list,form</field>
-    </record>
+      <div class="container fade-in mb-5" data-aos="fade-in">
 
-    <menuitem id="menu_gym_payment_root" name="Payments" parent="menu_gym_root" sequence="40"  action="action_gym_payment"/>
-    <!-- List View -->
-    <record id="view_gym_payment_list" model="ir.ui.view">
-        <field name="name">gym.payment.list</field>
-        <field name="model">gym.payment</field>
-        <field name="arch" type="xml">
-            <list>
-                <field name="member_id"/>
-                <field name="plan_id"/>
-                <field name="amount"/>
-                <field name="payment_method"/>
-                <field name="payment_date"/>
-            </list>
-        </field>
-    </record>
+        <!-- Welcome Row -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="d-flex align-items-center gap-3">
+            <t t-if="member.partner_id.image_1920">
+              <img t-att-src="'data:image/png;base64,%s' % member.partner_id.image_1920"
+                  class="rounded-circle avatar-glow"
+                  style="width: 90px; height: 90px; object-fit: cover; border: 2px solid #ccc;"/>
+            </t>
+            <div>
+              <h2 class="fw-bold mb-0">Welcome, <t t-esc="request.env.user.name"/> 👋</h2>
+              <div class="text-muted small" id="greeting-msg">Wishing you a great workout today!</div>
+            </div>
+          </div>
+        </div>
 
-    <!-- Form View -->
-    <record id="view_gym_payment_form" model="ir.ui.view">
-        <field name="name">gym.payment.form</field>
-        <field name="model">gym.payment</field>
-        <field name="arch" type="xml">
-            <form string="Payment">
-                <sheet>
-                    <group>
-                        <field name="member_id"/>
-                        <field name="plan_id"/>
-                        <field name="amount"/>
-                        <field name="payment_date"/>
-                        <field name="payment_method"/>
-                    </group>
-                    <group>
-                        <field name="note"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-</odoo>
+        <!-- Motivational Tip -->
+        <t t-if="workout_tips">
+          <div class="card border-0 shadow-sm bg-light p-3 mb-4 position-relative" data-aos="zoom-in">
+            <div class="position-absolute top-0 start-0 translate-middle bg-warning rounded-circle p-2">
+              <i class="fa fa-lightbulb text-white"></i>
+            </div>
+            <h6 class="fw-bold text-warning ps-5"><t t-esc="workout_tips[0].title"/></h6>
+            <p class="mb-0 text-dark ps-5"><t t-esc="workout_tips[0].description"/></p>
+          </div>
+        </t>
+
+        <!-- Quick Actions -->
+        <div class="row text-center g-4 mb-4">
+          <div class="col-6 col-md-3">
+            <a href="/my/gym/sessions" class="btn btn-outline-purple w-100 py-3 rounded-pill shadow-sm" data-aos="fade-up" title="Browse and join gym classes">
+              <i class="fa fa-calendar-check fa-2x mb-2 d-block"></i> Sessions
+            </a>
+          </div>
+          <div class="col-6 col-md-3">
+            <a href="/my/gym/attendance" class="btn btn-outline-success w-100 py-3 rounded-pill shadow-sm" data-aos="fade-up" title="Track your attendance">
+              <i class="fa fa-clock fa-2x mb-2 d-block"></i> Attendance
+            </a>
+          </div>
+          <div class="col-6 col-md-3">
+            <a href="/my/gym/invoices" class="btn btn-outline-info w-100 py-3 rounded-pill shadow-sm" data-aos="fade-up" title="View payment records">
+              <i class="fa fa-file-invoice-dollar fa-2x mb-2 d-block"></i> Payments
+            </a>
+          </div>
+          <div class="col-6 col-md-3">
+            <a href="/my/gym/dashboard" class="btn btn-outline-warning w-100 py-3 rounded-pill shadow-sm" data-aos="fade-up" title="Check progress and badges">
+              <i class="fa fa-chart-line fa-2x mb-2 d-block"></i> Dashboard
+            </a>
+          </div>
+        </div>
+
+        <!-- Membership Info -->
+        <t t-if="member">
+          <div class="glass-card shadow-sm p-4 position-relative" data-aos="fade-in">
+            <h5 class="fw-bold text-purple mb-3">
+              <i class="fa fa-id-card me-2"></i> Membership Overview
+            </h5>
+            <div class="row text-center">
+              <div class="col-md-4">
+                <strong>🏷️ Plan:</strong><br/>
+                <t t-esc="member.membership_plan_id.name"/>
+              </div>
+              <div class="col-md-4">
+                <strong>📅 Joined on:</strong><br/>
+                <t t-esc="member.join_date"/>
+              </div>
+              <div class="col-md-4">
+                <strong>⏳ Valid Until:</strong><br/>
+                <t t-esc="member.membership_end_date"/>
+              </div>
+            </div>
+          </div>
+        </t>
+
+        <div class="text-center mt-4">
+          <a href="/my/gym/feed" class="btn btn-outline-danger btn-sm rounded-pill">📣 Check what's new in the gym</a>
+        </div>
+      </div>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () =&gt; {
+          const now = new Date().getHours();
+          const msg = document.getElementById("greeting-msg");
+          if (msg) {
+            msg.innerText = now &lt; 12 ? "Good morning ☕" : now &lt; 18 ? "Good afternoon 🌞" : "Good evening 🌃";
+          }
+        });
+      </script>
+
+      <style>
+        .hero-section {
+          height: 400px;
+          background-size: cover;
+          background-position: center;
+          position: relative;
+        }
+        .overlay {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0,0,0,0.5);
+        }
+        .animated-title {
+          animation: pulse 2s infinite alternate;
+        }
+        @keyframes pulse {
+          from { transform: scale(1); }
+          to { transform: scale(1.02); }
+        }
+        .avatar-glow {
+          box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+          animation: avatarPulse 2s ease-in-out infinite alternate;
+        }
+        @keyframes avatarPulse {
+          from { box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
+          to { box-shadow: 0 0 16px rgba(255, 255, 255, 0.7); }
+        }
+        .glass-card {
+          background: rgba(255, 255, 255, 0.06);
+          backdrop-filter: blur(12px);
+          border-radius: 1rem;
+          border: 1px solid rgba(255,255,255,0.1);
+        }
+        .text-purple {
+          color: #6f42c1;
+        }
+      </style>
+
+    </t> -->
+  </template>
+</odoo> -->

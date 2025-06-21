@@ -1,65 +1,47 @@
-from odoo import models, fields
-from odoo.tools import date_utils
-from datetime import date, timedelta
+from odoo import models, fields, api
+from datetime import timedelta
 
-class GymDashboard(models.Model):
+
+class GymDashboard(models.TransientModel):
     _name = 'gym.dashboard'
     _description = 'Gym Dashboard'
-    _auto = False
-    _table = 'gym_dashboard_view'  # Avoid name conflict
 
-
-    name = fields.Char()
+    name = fields.Char(default="Gym Dashboard")
     active_members = fields.Integer()
     upcoming_sessions = fields.Integer()
     expiring_members = fields.Integer()
     total_payments = fields.Float()
 
-
-    def init(self):
-        self._cr.execute("""
-                    CREATE OR REPLACE VIEW gym_dashboard_view AS (
-                        SELECT
-                            1 AS id,
-                            'Gym Dashboard' AS name,
-                            0 AS active_members,
-                            0 AS upcoming_sessions,
-                            0 AS expiring_members,
-                            0.0 AS total_payments
-                    )
-                """)
-    
-    @classmethod
-    def search(cls, args, offset=0, limit=None, order=None, count=False):
-        dashboard = cls._get_dashboard_data()
-        return cls.browse([dashboard.id]) if dashboard else cls
-
-    @classmethod
-    def _get_dashboard_data(cls):
-        env = cls.env()
-        today = date.today()
+    @api.model
+    def create_dashboard_record(self):
+        today = fields.Date.context_today(self)
         in_7_days = today + timedelta(days=7)
+        self.search([]).unlink()
 
-        Member = env['gym.member'].sudo()
-        Session = env['gym.session'].sudo()
-        Payment = env['gym.payment'].sudo()
 
-        active_members = Member.search_count([('active', '=', True)])
-        upcoming_sessions = Session.search_count([
-            ('start_datetime', '>=', fields.Datetime.now()),
-            ('start_datetime', '<=', fields.Datetime.now() + timedelta(days=7))
-        ])
-        expiring_members = Member.search_count([
-            ('membership_end_date', '>=', today),
-            ('membership_end_date', '<=', in_7_days)
-        ])
-        total_payments = sum(Payment.search([]).mapped('amount'))
-
-        return cls(env).new({
-            'id': 1,
-            'name': 'Gym Dashboard',
-            'active_members': active_members,
-            'upcoming_sessions': upcoming_sessions,
-            'expiring_members': expiring_members,
-            'total_payments': total_payments,
+        dashboard = self.create({
+            'active_members': self.env['gym.member'].search_count([('active', '=', True)]),
+            'upcoming_sessions': self.env['gym.session'].search_count([
+                ('start_datetime', '>=', fields.Datetime.now()),
+                ('start_datetime', '<=', fields.Datetime.now() + timedelta(days=7))
+            ]),
+            'expiring_members': self.env['gym.member'].search_count([
+                ('membership_end_date', '>=', today),
+                ('membership_end_date', '<=', in_7_days)
+            ]),
+            'total_payments': sum(self.env['gym.payment'].search([]).mapped('amount')),
         })
+        return dashboard
+
+    @api.model
+    def action_open_dashboard(self):
+        dashboard = self.create_dashboard_record()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Gym Dashboard',
+            'res_model': 'gym.dashboard',
+            'res_id': dashboard.id,
+            'view_mode': 'kanban',
+            'view_id': self.env.ref('gym_meliora.view_gym_dashboard_kanban').id,
+            'target': 'main',
+        }
