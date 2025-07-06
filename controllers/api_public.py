@@ -125,3 +125,54 @@ class GymPublicAPI(http.Controller):
             ('Access-Control-Allow-Headers', 'Content-Type'),
         ]
         return Response("", headers=headers, status=200)
+
+
+
+    @http.route('/api/trainers/<int:trainer_id>', type='http', auth='public', methods=['GET', 'OPTIONS'])
+    def get_trainer_details(self, trainer_id, **kwargs):
+        if request.httprequest.method == 'OPTIONS':
+            return self._cors_preflight()
+
+        trainer = request.env['gym.trainer'].sudo().browse(trainer_id)
+        if not trainer.exists():
+            return self._json_response({'error': 'Trainer not found'}, status=404)
+
+        sessions = request.env['gym.session'].sudo().search([
+            ('trainer_id', '=', trainer.id)
+        ], order='start_datetime desc')
+
+        session_data = [{
+            'id': s.id,
+            'name': s.name,
+            'start_datetime': s.start_datetime.isoformat(),
+            'end_datetime': s.end_datetime.isoformat(),
+            'location': s.location,
+            'class_type': s.class_type_id.name if s.class_type_id else None,
+        } for s in sessions]
+
+        data = {
+            'id': trainer.id,
+            'name': trainer.name,
+            'specialty': trainer.specialty,
+            'member_count': trainer.member_count,
+            'sessions': session_data,
+            'certifications': [],  # Placeholder
+            # 'image': trainer.image.decode() if trainer.image else None
+        }
+
+        return self._json_response(data)
+
+
+    @http.route('/api/tips/categories', type='http', auth='public', methods=['GET', 'OPTIONS'])
+    def get_tip_categories(self, **kwargs):
+        if request.httprequest.method == 'OPTIONS':
+            return self._cors_preflight()
+
+        categories = request.env['gym.workout.tip'].sudo().read_group(
+            [('active', '=', True)],
+            ['category'],
+            ['category']
+        )
+
+        data = [cat['category'] for cat in categories if cat['category']]
+        return self._json_response({'categories': data})

@@ -25,3 +25,4 @@ class GymClassAttendance(models.Model):
             ])
             if existing:
                 raise ValidationError("This member already has an attendance record for this session.")
+
