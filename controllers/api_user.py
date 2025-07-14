@@ -447,3 +447,164 @@ class GymUserApi(http.Controller):
         } for p in payments]
 
         return self._json_response({'payments': data})
+
+    
+    @http.route('/api/member/sessions', type='http', auth='user', methods=['GET', 'OPTIONS'], csrf=False)
+    def get_member_sessions(self, **kwargs):
+        if request.httprequest.method == 'OPTIONS':
+            return self._cors_preflight()
+
+        user = request.env.user
+        partner = user.partner_id
+
+        member = request.env['gym.member'].sudo().search([('partner_id', '=', partner.id)], limit=1)
+        if not member:
+            return self._json_response({'error': 'Member not found'}, status=404)
+
+        sessions = member.session_ids
+
+        result = [{
+            'id': s.id,
+            'name': s.name,
+            'start': s.start_datetime.isoformat() if s.start_datetime else None,
+            'end': s.end_datetime.isoformat() if s.end_datetime else None,
+            'trainer': s.trainer_id.name if s.trainer_id else None,
+            'class_type': s.class_type_id.name if s.class_type_id else None,
+            'location': s.location,
+        } for s in sessions]
+
+        return self._json_response(result)
+    
+    @http.route('/api/member/profile/avatar', type='http', auth='user', methods=['GET', 'OPTIONS'])
+    def get_member_avatar(self, **kwargs):
+        if request.httprequest.method == 'OPTIONS':
+            return self._cors_preflight()
+
+        partner = request.env.user.partner_id
+        return self._json_response({
+            "avatar": partner.image_128.decode() if partner.image_128 else None
+        })
+
+    @http.route('/api/member/stats/summary', type='http', auth='user', methods=['GET', 'OPTIONS'])
+    def get_member_stats_summary(self, **kwargs):
+        if request.httprequest.method == 'OPTIONS':
+            return self._cors_preflight()
+
+        member = request.env['gym.member'].sudo().search([
+            ('partner_id', '=', request.env.user.partner_id.id)
+        ], limit=1)
+
+        attendance = request.env['gym.class.attendance'].sudo().search([
+            ('member_id', '=', member.id),
+            ('status', '=', 'present')
+        ])
+
+        top_class = None
+        if attendance:
+            class_count = {}
+            for record in attendance:
+                key = record.session_id.class_type_id.name
+                class_count[key] = class_count.get(key, 0) + 1
+            top_class = max(class_count.items(), key=lambda x: x[1])[0]
+
+        return self._json_response({
+            "total_attendance": len(attendance),
+            "unique_classes": len(set(a.session_id.class_type_id.name for a in attendance if a.session_id.class_type_id)),
+            "most_attended_class": top_class
+        })
+
+    @http.route('/api/tips/category/<string:category>', type='http', auth='public', methods=['GET', 'OPTIONS'])
+    def get_tips_by_category(self, category, **kwargs):
+        if request.httprequest.method == 'OPTIONS':
+            return self._cors_preflight()
+
+        tips = request.env['gym.workout.tip'].sudo().search([
+            ('category', '=', category),
+            ('active', '=', True)
+        ])
+
+        return self._json_response([
+            {
+                "title": t.title,
+                "description": t.description,
+                "category": t.category,
+                "image": t.image.decode() if t.image else None
+            } for t in tips
+        ])
+
+    @http.route('/api/sessions/booked', type='http', auth='user', methods=['GET', 'OPTIONS'])
+    def get_booked_sessions(self, **kwargs):
+        if request.httprequest.method == 'OPTIONS':
+            return self._cors_preflight()
+
+        member = request.env['gym.member'].sudo().search([
+            ('partner_id', '=', request.env.user.partner_id.id)
+        ], limit=1)
+
+        future_sessions = member.session_ids.filtered(lambda s: s.start_datetime >= fields.Datetime.now())
+        return self._json_response([
+            {
+                'id': s.id,
+                'name': s.name,
+                'start': s.start_datetime.isoformat(),
+                'end': s.end_datetime.isoformat(),
+                'trainer': s.trainer_id.name,
+                'location': s.location
+            } for s in future_sessions
+        ])
+
+    @http.route('/api/sessions/available', type='http', auth='user', methods=['GET', 'OPTIONS'])
+    def get_available_sessions(self, **kwargs):
+        if request.httprequest.method == 'OPTIONS':
+            return self._cors_preflight()
+
+        member = request.env['gym.member'].sudo().search([
+            ('partner_id', '=', request.env.user.partner_id.id)
+        ], limit=1)
+
+        sessions = request.env['gym.session'].sudo().search([
+            ('start_datetime', '>=', fields.Datetime.now()),
+            ('enrolled_member_ids', 'not in', member.id)
+        ], limit=30)
+
+        return self._json_response([
+            {
+                'id': s.id,
+                'name': s.name,
+                'start': s.start_datetime.isoformat(),
+                'end': s.end_datetime.isoformat(),
+                'trainer': s.trainer_id.name,
+                'class_type': s.class_type_id.name if s.class_type_id else None,
+                'location': s.location
+            } for s in sessions
+        ])
+
+    @http.route('/api/member/achievements', type='http', auth='user', methods=['GET', 'OPTIONS'])
+    def get_member_achievements(self, **kwargs):
+        if request.httprequest.method == 'OPTIONS':
+            return self._cors_preflight()
+
+        member = request.env['gym.member'].sudo().search([
+            ('partner_id', '=', request.env.user.partner_id.id)
+        ], limit=1)
+
+        # Mocked logic: real logic can depend on real metrics
+        badges = []
+        if member.session_ids:
+            if len(member.session_ids) >= 10:
+                badges.append("10 Sessions Completed")
+            if member.is_membership_expired is False:
+                badges.append("Active Member")
+
+        return self._json_response({"badges": badges})
+
+
+    @http.route('/api/member/contact-support', type='json', auth='user', methods=['POST'])
+    def send_support_message(self, **kwargs):
+        message = kwargs.get("message")
+        if not message:
+            return {"error": "No message provided"}
+
+        # You could also store this into a model like 'mail.message' or send an email
+        return {"success": True, "message": "Your message has been received!"}
+

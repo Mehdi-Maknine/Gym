@@ -8,7 +8,6 @@ app.use(express.json());
 
 // === Public & User API Routes ===
 
-// 1. Dashboard
 app.get('/api/member/dashboard', (req, res) => {
   res.json({
     name: "John Doe",
@@ -26,7 +25,6 @@ app.get('/api/member/dashboard', (req, res) => {
   });
 });
 
-// 2. Session Search
 app.get('/api/sessions/search', (req, res) => {
   res.json({
     sessions: [{
@@ -43,7 +41,6 @@ app.get('/api/sessions/search', (req, res) => {
   });
 });
 
-// 3. Programs
 app.get('/api/programs', (req, res) => {
   res.json({
     programs: [
@@ -53,7 +50,6 @@ app.get('/api/programs', (req, res) => {
   });
 });
 
-// 4. Trainers
 app.get('/api/trainers', (req, res) => {
   res.json({
     trainers: [
@@ -63,7 +59,6 @@ app.get('/api/trainers', (req, res) => {
   });
 });
 
-// 5. Tips
 app.get('/api/tips', (req, res) => {
   res.json({
     tips: [
@@ -73,7 +68,6 @@ app.get('/api/tips', (req, res) => {
   });
 });
 
-// 6. Upcoming Sessions
 app.get('/api/sessions/upcoming', (req, res) => {
   res.json({
     sessions: [
@@ -82,7 +76,6 @@ app.get('/api/sessions/upcoming', (req, res) => {
   });
 });
 
-// 7. Memberships
 app.get('/api/memberships', (req, res) => {
   res.json({
     memberships: [
@@ -94,7 +87,6 @@ app.get('/api/memberships', (req, res) => {
 
 // === Authenticated Routes ===
 
-// 8. Member Profile
 app.get('/api/member/me', (req, res) => {
   res.json({
     id: 1,
@@ -114,7 +106,6 @@ app.get('/api/member/me', (req, res) => {
   });
 });
 
-// 9. Attendance
 app.get('/api/member/attendance', (req, res) => {
   res.json([
     { session: "Zumba Blast", date: "2025-07-01", status: "present" },
@@ -122,7 +113,6 @@ app.get('/api/member/attendance', (req, res) => {
   ]);
 });
 
-// 10. Progress
 app.get('/api/member/progress', (req, res) => {
   res.json({
     total_checkins: 18,
@@ -131,7 +121,6 @@ app.get('/api/member/progress', (req, res) => {
   });
 });
 
-// 11. Feed Messages
 app.get('/api/feed/messages', (req, res) => {
   res.json([
     { title: "Summer Bootcamp!", content: "Join our summer training series!", date: "2025-07-04 10:00" },
@@ -139,19 +128,62 @@ app.get('/api/feed/messages', (req, res) => {
   ]);
 });
 
-// 12. Book Session
+app.get('/api/member/sessions', (req, res) => {
+  res.json([
+    { id: 1, name: "Zumba Blast", start: "2025-07-01T08:00:00", end: "2025-07-01T09:00:00", trainer: "Lina", class_type: "Zumba", location: "Room A" }
+  ]);
+});
+
+app.get('/api/member/profile/avatar', (req, res) => {
+  res.json({ avatar: null });
+});
+
+app.get('/api/member/stats/summary', (req, res) => {
+  res.json({
+    total_attendance: 22,
+    unique_classes: 3,
+    most_attended_class: "HIIT"
+  });
+});
+
+app.get('/api/tips/category/:category', (req, res) => {
+  const { category } = req.params;
+  res.json([
+    { title: `Example Tip for ${category}`, description: "Stay active!", category, image: null }
+  ]);
+});
+
+app.get('/api/sessions/booked', (req, res) => {
+  res.json([
+    { id: 5, name: "Mobility Flow", start: "2025-07-10T10:00:00", end: "2025-07-10T11:00:00", trainer: "Laura", location: "Hall C" }
+  ]);
+});
+
+app.get('/api/sessions/available', (req, res) => {
+  res.json([
+    { id: 6, name: "Strength Class", start: "2025-07-12T12:00:00", end: "2025-07-12T13:00:00", trainer: "Mike", location: "Room B", class_type: "Strength" }
+  ]);
+});
+
+app.get('/api/member/achievements', (req, res) => {
+  res.json({ badges: ["10 Sessions Completed", "Active Member"] });
+});
+
+app.post('/api/member/contact-support', (req, res) => {
+  const { message } = req.body;
+  res.json({ success: true, message: "Your message has been received!" });
+});
+
 app.post('/api/sessions/book', (req, res) => {
   const { session_id } = req.body;
   res.json({ success: true, message: `Session ${session_id} booked!` });
 });
 
-// 13. Cancel Session
 app.post('/api/sessions/cancel', (req, res) => {
   const { session_id } = req.body;
   res.json({ success: true, message: `Session ${session_id} cancelled.` });
 });
 
-// 14. Renew Membership
 app.post('/api/membership/renew', (req, res) => {
   const { plan_id } = req.body;
   res.json({ success: true, message: `Membership renewed with plan ${plan_id}` });
