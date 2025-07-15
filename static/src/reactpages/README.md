@@ -1,70 +1,126 @@
-# Getting Started with Create React App
+# 🏋️‍♀️ Meliora Gym React Frontend — Developer README (Private)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> This README is for internal use only — specifically for **you, our React developer friend** — to help you set up, run, and develop the frontend using mock data without Odoo.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## ✅ What You're Working With
 
-### `npm start`
+This is the **React frontend** for the Meliora Gym web app. The backend is built in Odoo, but you **don't need to install Odoo** — you're using a **fake backend (mock server)** that simulates the real API.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Initial Setup
 
-### `npm test`
+1. **Clone the repo**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. **Install dependencies** (including React + mock server tools):
 
-### `npm run build`
+```bash
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. **Start everything** (frontend + mock backend):
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+npm run dev:full
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This command does two things:
 
-### `npm run eject`
+* Starts the fake Odoo API on `http://localhost:8069`
+* Starts the React app on `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🧪 Mock Backend Details
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The mock server is located in:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+mockServer.js
+```
 
-## Learn More
+It uses **Express** and **CORS** to replicate all Odoo API routes and responses.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### To run it alone:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm run mock-backend
+```
 
-### Code Splitting
+### To edit or add mock data:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Just open `mockServer.js` and update the fake JSON returned inside each route, e.g.:
 
-### Analyzing the Bundle Size
+```js
+app.get('/api/programs', (req, res) => {
+  res.json({
+    programs: [
+      { id: 1, name: "HIIT", description: "Intense and fun" },
+      { id: 2, name: "Yoga", description: "Flow & relax" }
+    ]
+  });
+});
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+You can add more items, change fields, or even simulate errors if needed.
 
-### Making a Progressive Web App
+> Every time you change `mockServer.js`, you’ll need to **restart the mock backend**:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+CTRL+C  # to stop it
+npm run mock-backend
+```
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 📡 Available API Endpoints (From Odoo, Mocked Locally)
 
-### Deployment
+These are all fully working via the mock server:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### 🔐 Member (User API)
 
-### `npm run build` fails to minify
+* `GET /api/member/dashboard` — Member dashboard (name, avatar, sessions, tip, feed)
+* `GET /api/sessions/search` — Search for gym sessions (filters supported: trainer\_id, class\_type\_id, location, etc.)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 🌐 Public (Landing Page APIs)
+
+* `GET /api/programs` — List of gym programs / class types
+* `GET /api/trainers` — List of gym trainers
+* `GET /api/tips` — Motivational or general workout tips (with optional category)
+* `GET /api/sessions/upcoming` — Next 5 upcoming gym sessions
+* `GET /api/memberships` — Membership plans (monthly, annual, etc.)
+
+Each of these returns **realistic fake data**.
+
+---
+
+## 📦 Scripts Reference
+
+| Script                 | What it does                                 |
+| ---------------------- | -------------------------------------------- |
+| `npm run start`        | Starts the React app only                    |
+| `npm run mock-backend` | Starts the mock backend API only (port 8069) |
+| `npm run dev:full`     | 🚀 Starts both (React + mock API) in one go  |
+
+---
+
+## 👨‍💻 Tips for Development
+
+* You can use all APIs without authentication (mock server doesn’t require login)
+* The mock data structure matches the real backend fields from Odoo
+* You can simulate delays or errors if needed by modifying the Express routes
+* If you're unsure about a field or endpoint, just ask — the backend logic is already done in Odoo and can be shared
+
+---
+
+## ❓ Need Help?
+
+Contact Mehdi — the backend dev who made the Odoo API — for:
+
+* Real field names / datatypes
+* Adding new endpoints
+* Explaining any API logic / how the real app works behind the scenes
+
+We’ve got your back 💪

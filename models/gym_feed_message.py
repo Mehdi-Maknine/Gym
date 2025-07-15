@@ -10,3 +10,4 @@ class GymFeedMessage(models.Model):
     date_posted = fields.Datetime(string="Date Posted", default=fields.Datetime.now)
     image = fields.Image(string="Optional Image")
     active = fields.Boolean(default=True)
+    audience = fields.Selection([ ('public', 'Public'), ('member', 'Members Only'), ], default='public', string='Audience')

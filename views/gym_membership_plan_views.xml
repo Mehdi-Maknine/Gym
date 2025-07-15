@@ -20,7 +20,7 @@
         <field name="name">gym.membership.plan.tree</field>
         <field name="model">gym.membership.plan</field>
         <field name="arch" type="xml">
-            <list decoration-muted="not active">
+            <list>
                 <field name="name"/>
                 <field name="price" widget="monetary"/>
                 <field name="duration_months"/>
@@ -110,6 +110,7 @@
                 <field name="price"/>
                 <field name="duration_months"/>
                 <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active', '=', False)]"/>
                 <group expand="1" string="Group By">
                     <filter name="group_by_duration" string="Duration" context="{'group_by': 'duration_months'}"/>
                     <filter name="group_by_active" string="Active/Inactive" context="{'group_by': 'active'}"/>
