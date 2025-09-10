@@ -1,0 +1,4 @@
+[submodule "static/src/reactpages"]
+	path = static/src/reactpages
+	url = git@github.com:Malek-1999/Meliora-Gym.git
+	branch = main
